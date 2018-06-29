@@ -15,6 +15,7 @@ class App extends Component {
           To get started, edit <code>src/App.js</code> and save to reload.
         </p>
 
+        <WorkerForm />
         <WorkersList />
 
       </div>
@@ -84,7 +85,7 @@ class WorkersList extends React.Component {
     // WARNING please use the chrome extension -> allow-control-allow-origi to allow this request
     // https://chrome.google.com/webstore/detail/allow-control-allow-origi/nlfbmbojpeacfghkpbjhddihlkkiljbi
     // WARNING
-    
+
     axios.get('http://localhost:3000/workers.json')
       .then(response => this.setState({ workers: response.data.workers }))
       .catch(error => console.log(error))
@@ -99,6 +100,67 @@ class WorkersList extends React.Component {
     );
   }
 }
+
+
+
+class WorkerForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      first_name: '',
+      status: '',
+    };
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleChange(event) {
+    const name = event.target.name;
+    const value = event.target.value
+    this.setState({[name]: value});
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+
+    const worker = {
+      first_name: this.state.first_name,
+      status: this.state.status,
+    };
+
+    axios.post('http://localhost:3000/workers.json', { worker })
+      .then(response => console.log(response))
+      .catch(error => console.log(error.response))
+  }
+
+  render() {
+    return (
+      <div className="container mb-4">
+        <form onSubmit={this.handleSubmit}>
+          <div className="row">
+            <div className="col">
+              <input name="first_name" className="form-control" type="text" placeholder="Worker firstname"
+              value={this.state.first_name}  onChange={this.handleChange} />
+            </div>
+            <div className="col">
+              <select name="status" className="custom-select" value={this.state.status} onChange={this.handleChange}>
+                <option selected>Select status</option>
+                <option key={0} value={'medic'}>medic</option>
+                <option key={1} value={'intern'}>intern</option>
+                <option key={2} value={'cover'}>cover</option>
+              </select>
+            </div>
+            <div className="col">
+              <input className="btn btn-primary" type="submit" value="Add worker" />
+            </div>
+          </div>
+        </form>
+      </div>
+    );
+  }
+}
+
 
 
 export default App;
