@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import axios from 'axios';
 
 class App extends Component {
   render() {
@@ -26,19 +27,19 @@ class Worker extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: props.name,
+      first_name: props.first_name,
       status: props.status,
       price: props.price,
-      shiftsCount: props.shiftsCount,
-      shiftsDates: props.shiftsDates,
+      shifts_count: props.shifts_count,
+      shifts_dates: props.shifts_dates,
     };
   }
 
   formatShiftsDates = () => {
     let formattedShifts = '';
-    for (let i=0; i<this.state.shiftsDates.length; i++) {
-      formattedShifts = formattedShifts.concat(this.state.shiftsDates[i]);
-      if (i < this.state.shiftsDates.length -1) {
+    for (let i=0; i<this.state.shifts_dates.length; i++) {
+      formattedShifts = formattedShifts.concat(this.state.shifts_dates[i]);
+      if (i < this.state.shifts_dates.length -1) {
         formattedShifts = formattedShifts.concat(' ');
         formattedShifts = formattedShifts.concat('|');
         formattedShifts = formattedShifts.concat(' ');
@@ -50,10 +51,10 @@ class Worker extends React.Component {
   render() {
     return (
       <div className="worker pt-4 pr-4 pl-4 pb-4 mb-4 text-left">
-        <p>{this.state.name}</p>
+        <p>{this.state.first_name}</p>
         <p>Status: {this.state.status}</p>
         <p>Price: {this.state.price} €</p>
-        <p>Number of shifts: {this.state.shiftsCount}</p>
+        <p>Number of shifts: {this.state.shifts_count}</p>
         <p>Dates of shifts: {this.formatShiftsDates()}</p>
       </div>
     );
@@ -62,24 +63,38 @@ class Worker extends React.Component {
 
 
 class WorkersList extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      workers: [],
+    };
+    this.loadData();
+  }
 
-  renderWorker(name, status, price, shiftsCount, shiftsDates) {
+  renderWorker(first_name, status, price, shifts_count, shifts_dates) {
     return (
-      <div key={name}>
-        <Worker name={name} status={status} price={price} shiftsCount={shiftsCount}
-          shiftsDates={shiftsDates} />
+      <div key={first_name}>
+        <Worker first_name={first_name} status={status} price={price} shifts_count={shifts_count}
+          shifts_dates={shifts_dates} />
       </div>
     )
+  }
+
+  loadData = () => {
+    // WARNING please use the chrome extension -> allow-control-allow-origi to allow this request
+    // https://chrome.google.com/webstore/detail/allow-control-allow-origi/nlfbmbojpeacfghkpbjhddihlkkiljbi
+    // WARNING
+    
+    axios.get('http://localhost:3000/workers.json')
+      .then(response => this.setState({ workers: response.data.workers }))
+      .catch(error => console.log(error))
   }
 
   render() {
     return (
       <div className="container">
-        {this.renderWorker('Julie', 'medic', 540, 1, ['2017-1-1'])}
-        {this.renderWorker('Marc', 'medic', 810, 3, ['2017-1-2', '2017-1-6', '2017-1-10'])}
-        {this.renderWorker('Antoine', 'intern', 126, 1, ['2017-01-03'])}
-        {this.renderWorker('Emilie', 'medic', 810, 2, ['2017-01-04','2017-01-08'])}
-        {this.renderWorker('Lea', 'cover', 1920, 3, ['2017-01-05', '2017-01-07', '2017-01-09'])}
+        {this.state.workers.map(worker => this.renderWorker(worker.first_name, worker.status, worker.price,
+          worker.shifts_count, worker.shifts_dates))}
       </div>
     );
   }
