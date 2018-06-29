@@ -109,6 +109,8 @@ class WorkerForm extends React.Component {
     this.state = {
       first_name: '',
       status: '',
+      succesMessage: '',
+      errors: [],
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -130,13 +132,41 @@ class WorkerForm extends React.Component {
     };
 
     axios.post('http://localhost:3000/workers.json', { worker })
-      .then(response => console.log(response))
-      .catch(error => console.log(error.response))
+      .then(response => {
+        this.setState({ succesMessage : response.data.message })
+        console.log(response)
+      })
+      .catch(error => {
+        this.setState({ errors : error.response.data.workers })
+        console.log(error.response)
+      })
+  }
+
+  renderSuccessMessage() {
+    if (this.state.succesMessage !== ''){
+      return (
+        <div className="p-3 mb-2 bg-success text-white rounded">
+          {this.state.succesMessage}
+        </div>
+      )
+    }
+  }
+
+  renderErrors() {
+    if (this.state.errors.length > 0){
+      return (
+        <div className="p-3 mb-2 bg-danger text-white rounded">
+          {this.state.errors.map(error => error + ' ')}
+        </div>
+      )
+    }
   }
 
   render() {
     return (
       <div className="container mb-4">
+        {this.renderSuccessMessage()}
+        {this.renderErrors()}
         <form onSubmit={this.handleSubmit}>
           <div className="row">
             <div className="col">
