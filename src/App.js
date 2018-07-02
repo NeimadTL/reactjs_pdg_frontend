@@ -3,8 +3,9 @@ import logo from './logo.svg';
 import './App.css';
 import { BrowserRouter as Router, Link, Route, Redirect } from 'react-router-dom'
 import Welcome from './components/Welcome';
-import WorkersList from './components/WorkersList';
-import WorkerForm from './components/WorkerForm';
+import WorkersList from './components/workers/WorkersList';
+import WorkerForm from './components/workers/WorkerForm';
+import ShiftsList from './components/shifts/ShiftsList';
 
 class App extends Component {
   render() {
@@ -19,6 +20,7 @@ class App extends Component {
           <div className="mb-4">
             <Link to={"/workers/new"} className='btn btn-primary'>New worker</Link>
             <Link to={"/workers"} className='btn btn-primary'>All workers</Link>
+            <Link to={"/shifts"} className='btn btn-primary'>All shifts</Link>
           </div>
 
           <div className="App-intro">
@@ -26,6 +28,7 @@ class App extends Component {
             <Route exact={true} path="/workers" component={WorkersList}/>
             <Route exact={true} path="/workers/new" component={WorkerForm}/>
             <Route exact={true} path="/workers/:workerId/edit" component={worker}/>
+            <Route exact={true} path="/shifts" component={ShiftsList}/>
             <Redirect to="/" />
           </div>
         </div>
