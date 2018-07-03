@@ -12,10 +12,11 @@ class ShiftsList extends React.Component {
     this.loadData();
   }
 
-  renderShift(id, start_date, worker) {
+  renderShift(id, start_date, worker_firstname, worker_id) {
     return (
       <div key={id}>
-        <Shift id={id} start_date={start_date} worker={worker} />
+        <Shift id={id} start_date={start_date} worker_firstname={worker_firstname}
+          worker_id={worker_id} />
       </div>
     )
   }
@@ -33,7 +34,8 @@ class ShiftsList extends React.Component {
   render() {
     return (
       <div className="container">
-        {this.state.shifts.map(shift => this.renderShift(shift.id, shift.start_date, shift.worker))}
+        {this.state.shifts.map(shift => this.renderShift(shift.id, shift.start_date,
+          shift.worker_firstname, shift.worker_id))}
       </div>
     );
   }

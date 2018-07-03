@@ -5,11 +5,13 @@ class ShiftForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      start_date: '',
-      worker_id: '',
+      start_date: props.start_date || '',
+      worker_id: props.worker_id || '',
       succesMessage: '',
       workers: [],
       errors: [],
+      mode: props.mode,
+      idShift: props.idShift,
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -37,15 +39,28 @@ class ShiftForm extends React.Component {
       worker_id: this.state.worker_id,
     };
 
-    axios.post('http://localhost:3000/shifts.json', { shift })
-      .then(response => {
-        this.setState({ succesMessage : response.data.message })
-        console.log(response)
-      })
-      .catch(error => {
-        this.setState({ errors : error.response.data.shifts })
-        console.log(error.response)
-      })
+    if(this.state.mode === 'create'){
+      axios.post('http://localhost:3000/shifts.json', { shift })
+        .then(response => {
+          this.setState({ succesMessage : response.data.message })
+          console.log(response)
+        })
+        .catch(error => {
+          this.setState({ errors : error.response.data.shifts })
+          console.log(error.response)
+        })
+    }
+    else {
+      axios.put(`http://localhost:3000/shifts/${this.state.idShift}`, { shift })
+        .then(response => {
+          this.setState({ succesMessage : response.data.message })
+          console.log(response)
+        })
+        .catch(error => {
+          this.setState({ errors : error.response.data.shifts })
+          console.log(error.response)
+        })
+    }
   }
 
   renderSuccessMessage() {
@@ -89,7 +104,8 @@ class ShiftForm extends React.Component {
             </select>
           </div>
           <div className="row justify-content-center">
-            <input className="btn btn-primary" type="submit" value="Add shift" />
+            <input className="btn btn-primary" type="submit"
+            value={this.state.mode === 'create' ? "Add shift" : "Modify shift"} />
           </div>
         </form>
       </div>

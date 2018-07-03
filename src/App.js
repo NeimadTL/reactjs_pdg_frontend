@@ -31,7 +31,7 @@ class App extends Component {
             <Route exact={true} path="/workers" component={WorkersList}/>
             <Route exact={true} path="/workers/new" render={() =>(<WorkerForm mode='create' />)}/>
             <Route exact={true} path="/shifts" component={ShiftsList}/>
-            <Route exact={true} path="/shifts/new" component={ShiftForm}/>
+            <Route exact={true} path="/shifts/new" render={() =>(<ShiftForm mode='create' />)}/>
             <Redirect to="/" />
           </div>
         </div>
