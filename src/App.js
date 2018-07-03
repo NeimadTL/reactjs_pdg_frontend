@@ -29,8 +29,7 @@ class App extends Component {
           <div className="App-intro">
             <Route exact={true} path="/" component={Welcome}/>
             <Route exact={true} path="/workers" component={WorkersList}/>
-            <Route exact={true} path="/workers/new" component={WorkerForm}/>
-            <Route exact={true} path="/workers/:workerId/edit" component={worker}/>
+            <Route exact={true} path="/workers/new" render={() =>(<WorkerForm mode='create' />)}/>
             <Route exact={true} path="/shifts" component={ShiftsList}/>
             <Route exact={true} path="/shifts/new" component={ShiftForm}/>
             <Redirect to="/" />
@@ -40,11 +39,5 @@ class App extends Component {
     );
   }
 }
-
-const worker = ({ match }) => (
-  <div className="yes">{match.params.workerId}</div>
-)
-
-
 
 export default App;

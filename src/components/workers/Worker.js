@@ -1,10 +1,11 @@
 import React from 'react';
-import { Link } from 'react-router-dom'
+import { Link, BrowserRouter as Router, Route } from 'react-router-dom'
+import WorkerForm from './WorkerForm';
 
 
 class Worker extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor(props, context) {
+    super(props, context);
     this.state = {
       id: props.id,
       first_name: props.first_name,
@@ -14,7 +15,6 @@ class Worker extends React.Component {
       shifts_dates: props.shifts_dates,
     };
   }
-
 
   formatShiftsDates = () => {
     let formattedShifts = '';
@@ -31,6 +31,7 @@ class Worker extends React.Component {
 
   render() {
     return (
+      <Router>
       <div className="worker pt-4 pr-4 pl-4 pb-4 mb-4 text-left">
         <p>{this.state.first_name}</p>
         <p>Status: {this.state.status}</p>
@@ -38,7 +39,12 @@ class Worker extends React.Component {
         <p>Number of shifts: {this.state.shifts_count}</p>
         <p>Dates of shifts: {this.formatShiftsDates()}</p>
         <Link to={`/workers/${this.state.id}/edit`}>Edit</Link>
+        <Route exact={true} path="/workers/:workerId/edit" render={() =>(
+          <WorkerForm first_name={this.state.first_name} status={this.state.status}
+            mode='edit' idWorker={this.state.id}/>
+        )}/>
       </div>
+      </Router>
     );
   }
 }

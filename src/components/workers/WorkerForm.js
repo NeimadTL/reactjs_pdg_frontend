@@ -5,10 +5,12 @@ class WorkerForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      first_name: '',
-      status: '',
+      first_name: props.first_name || '',
+      status: props.status || '',
       succesMessage: '',
       errors: [],
+      mode: props.mode,
+      idWorker: props.idWorker
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -29,15 +31,28 @@ class WorkerForm extends React.Component {
       status: this.state.status,
     };
 
-    axios.post('http://localhost:3000/workers.json', { worker })
-      .then(response => {
-        this.setState({ succesMessage : response.data.message })
-        console.log(response)
-      })
-      .catch(error => {
-        this.setState({ errors : error.response.data.workers })
-        console.log(error.response)
-      })
+    if(this.state.mode === 'create'){
+      axios.post('http://localhost:3000/workers.json', { worker })
+        .then(response => {
+          this.setState({ succesMessage : response.data.message })
+          console.log(response)
+        })
+        .catch(error => {
+          this.setState({ errors : error.response.data.workers })
+          console.log(error.response)
+        })
+    }
+    else{
+      axios.put(`http://localhost:3000/workers/${this.state.idWorker}`, { worker })
+        .then(response => {
+          this.setState({ succesMessage : response.data.message })
+          console.log(response)
+        })
+        .catch(error => {
+          this.setState({ errors : error.response.data.workers })
+          console.log(error.response)
+        })
+    }
   }
 
   renderSuccessMessage() {
@@ -79,7 +94,8 @@ class WorkerForm extends React.Component {
             </select>
           </div>
           <div className="row justify-content-center">
-            <input className="btn btn-primary" type="submit" value="Add worker" />
+            <input className="btn btn-primary" type="submit"
+              value={this.state.mode === 'create' ? "Add worker" : "Modify worker"} />
           </div>
         </form>
       </div>
