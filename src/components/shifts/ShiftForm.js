@@ -46,7 +46,7 @@ class ShiftForm extends React.Component {
           console.log(response)
         })
         .catch(error => {
-          this.setState({ errors : error.response.data.shifts })
+          this.setState({ errors : error.response.data.errors })
           console.log(error.response)
         })
     }
@@ -57,7 +57,7 @@ class ShiftForm extends React.Component {
           console.log(response)
         })
         .catch(error => {
-          this.setState({ errors : error.response.data.shifts })
+          this.setState({ errors : error.response.data.errors })
           console.log(error.response)
         })
     }

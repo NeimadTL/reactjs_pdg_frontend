@@ -38,7 +38,7 @@ class WorkerForm extends React.Component {
           console.log(response)
         })
         .catch(error => {
-          this.setState({ errors : error.response.data.workers })
+          this.setState({ errors : error.response.data.errors })
           console.log(error.response)
         })
     }
@@ -49,7 +49,7 @@ class WorkerForm extends React.Component {
           console.log(response)
         })
         .catch(error => {
-          this.setState({ errors : error.response.data.workers })
+          this.setState({ errors : error.response.data.errors })
           console.log(error.response)
         })
     }
