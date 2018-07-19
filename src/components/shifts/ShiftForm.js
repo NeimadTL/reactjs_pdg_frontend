@@ -39,28 +39,23 @@ class ShiftForm extends React.Component {
       worker_id: this.state.worker_id,
     };
 
+    var promise;
+    
     if(this.state.mode === 'create'){
-      axios.post('http://localhost:3000/shifts.json', { shift })
-        .then(response => {
-          this.setState({ succesMessage : response.data.message })
-          console.log(response)
-        })
-        .catch(error => {
-          this.setState({ errors : error.response.data.errors })
-          console.log(error.response)
-        })
+      promise = axios.post('http://localhost:3000/shifts.json', { shift })
     }
     else {
-      axios.put(`http://localhost:3000/shifts/${this.state.idShift}`, { shift })
-        .then(response => {
-          this.setState({ succesMessage : response.data.message })
-          console.log(response)
-        })
-        .catch(error => {
-          this.setState({ errors : error.response.data.errors })
-          console.log(error.response)
-        })
+      promise = axios.put(`http://localhost:3000/shifts/${this.state.idShift}`, { shift })
     }
+
+    promise.then(response => {
+      this.setState({ succesMessage : response.data.message })
+      console.log(response)
+    })
+    .catch(error => {
+      this.setState({ errors : error.response.data.errors })
+      console.log(error.response)
+    })
   }
 
   renderSuccessMessage() {
