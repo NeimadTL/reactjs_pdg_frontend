@@ -39,7 +39,7 @@ class Worker extends React.Component {
           <p>Number of shifts: {this.state.shifts_count}</p>
           <p>Dates of shifts: {this.formatShiftsDates()}</p>
           <Link to={`/workers/${this.state.id}/edit`}>Edit</Link>
-          <Route exact={true} path="/workers/:workerId/edit" render={() =>(
+          <Route exact={true} path="/workers/:id/edit" render={() =>(
             <WorkerForm first_name={this.state.first_name} status={this.state.status}
               mode='edit' idWorker={this.state.id}/>
           )}/>
